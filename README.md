@@ -1,4 +1,4 @@
-![gwsaospfieddoclava_sample](https://github.com/shareme/GWSAOSPifiedDocLava/raw/master/sampleimages/gwsaospfieddoclava.png)
+![gwsaospfieddoclava_sample](https://github.com/shareme/GWSAOSPifiedDocLava/raw/master/sampleimages/gwsaospifieddoclava.png)
 
 
 GWSAOSPifiedDocLava
