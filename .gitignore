@@ -4,3 +4,4 @@ build\*
 .apt_generated\*
 local.properties
 /bin
+/build

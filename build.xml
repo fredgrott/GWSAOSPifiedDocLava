@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Apr 6, 2014 1:05:22 PM                                                        
+
+     GWSAOSPifiedDocLava    
+     AOSPified fork of doclava repackaged to use with Apache ANT and Gradle
+                   
+     Fred Grott                                                                
+     ====================================================================== -->
+<project name="GWSAOSPifiedDocLava" default="default">
+    <description>
+            AOSPified fork of doclava repackaged to use with Apache ANT and Gradle
+    </description>
+	<property file="local.properties" />
+
+	<property name="jar.dir" value="${basedir}/build/dist/gwsaospifieddoclava"/>
+	<property name="jar.file" value="${jar.dir}/gwsaospifieddoclava-android-4.4.2_r2.jar"/>
+
+	<property environment="env"/>
+	<property name="javahome" value="${env.JAVA_HOME}" />
+	<property name="jsilver" value="${basedir}/lib/jsilver-1.0.0.jar"/>
+	<!-- added as AOSP itself included the antl runtime classes in another external 
+	git moduel dep which is why you donto see it mentioned in their build file -->
+	<property name="antlr" value="${basedir}/lib/antlr-runtime-3.4.jar"/>
+	
+	<path id="our.build.classpath">
+		<pathelement location="${jsilver}"/>
+		<pathelement location="${antlr}"/>
+		<pathelement location="${our.toolsjar}"/>
+	    </path>
+
+	<target name="compile" description="Compile Java source.">
+	                <mkdir dir="build/classes"/>
+
+	                <javac srcdir="src"
+	         debug="on"
+	         destdir="build/classes"
+	         source="1.6"
+	         target="1.6"
+	                	bootclasspath="${our.bootclasspath}"
+	         extdirs="">
+	                        <compilerarg value="-Xlint:all"/>
+	                        <classpath>
+	                                <pathelement location="${jsilver}"/>
+	                        	    <pathelement location="${antlr}"/>
+	                        </classpath>
+	                </javac>
+	</target>
+
+	<target name="jar" depends="compile" description="Build jar.">
+	                <mkdir dir="${jar.dir}"/>
+
+	                <copy todir="build/classes/assets">
+	                        <fileset dir="res/assets"/>
+	                </copy>
+
+	                <jar jarfile="${jar.file}" >
+	                        <fileset dir="build/classes"/>
+	                        <zipfileset src="${jsilver}" />
+	                	    <zipfileset src="${antlr}"/>
+	                </jar>
+	</target>
+
+	<target name="clean"
+	      description="Remove generated files.">
+	                <delete dir="build"/>
+	        </target>
+
+	        <target name="clean-jar" 
+	                description="cleans and builds a .jar"
+	                depends="clean,jar">
+	</target>
+	
+	<target name="doclava" depends="jar" description="Generate documentation">
+	                
+	                
+	                 
+	                        
+		<javadoc packagenames="com.google.*"
+		           destdir="build/docs"
+		           sourcepath="src"
+		           docletpath="${jar.file}"
+			       classpathref="our.build.classpath"
+		           bootclasspath="${our.bootclasspath}"
+		           >
+		      <doclet name="com.google.doclava.Doclava">
+		        <param name="-stubs" value="build/stubs" />
+		        <param name="-hdf"/> <param name="project.name"/> <param name="GWSAOSPifiedDocLava"/>
+		        
+		      </doclet>
+		    </javadoc>
+	</target>
+	
+
+
+	
+
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="default" depends="depends" description="AOSPified fork of doclava repackaged to use with Apache ANT and Gradle">
+        
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: depends                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="depends">
+    </target>
+
+</project>
